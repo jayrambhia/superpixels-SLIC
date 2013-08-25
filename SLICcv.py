@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 
 class SLIC:
     def __init__(self, img, step, nc):
@@ -206,3 +207,16 @@ class SLIC:
                     min_grad = abs(c1[0] - c3[0]) + abs(c2[0] - c3[0])
                     loc_min = [i, j]
         return loc_min
+
+img = cv2.imread(sys.argv[1])
+nr_superpixels = int(sys.argv[2])
+nc = int(sys.argv[3])
+
+step = int((img.shape[0]*img.shape[1]/nr_superpixels)**0.5)
+
+slic = SLIC(img, step, nc)
+slic.generateSuperPixels()
+slic.createConnectivity()
+cv2.imshow("superpixels", slic.img)
+cv2.waitKey(0)
+cv2.imwrite("SLICimg.jpg", slic.img)
